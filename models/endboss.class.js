@@ -1,6 +1,6 @@
 class Endboss extends MoveableObject {
 height = 600;
-width = 400;
+width = 350;
 y = -40;
 health = 150;
 
@@ -36,7 +36,7 @@ health = 150;
         super().loadImage(this.IMAGES_WALKING_ENDBOSS[0]);
         this.loadImages(this.IMAGES_WALKING_ENDBOSS);
         this.loadImages(this.IMAGES_DEAD_ENDBOSS);
-        this.x = 2240;
+        this.x = 3440;
         this.animate();
     }
     

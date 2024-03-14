@@ -11,8 +11,8 @@ class World {
     statusBarEndboss = new StatusBarEndboss();
     statusBarBottles = new StatusBarBottle();
     throwableObjects = [];
-    BottleCollect = [new BottleCollect(), new BottleCollect(), new BottleCollect()];
-    CoinCollect = [new CoinCollect(), new CoinCollect(), new CoinCollect()];
+    BottleCollect = [new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect()];
+    CoinCollect = [new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(),new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect()];
 
     
     constructor(canvas, keyboard){
@@ -99,10 +99,18 @@ class World {
                 setTimeout(() => {
                     bottleCollectSound.pause(); // Stoppe den Sound nach einer Sekunde
                 }, 1000);
-                this.BottleCollect.splice(index, 1); 
+    
+                // Entferne die Flasche aus der Sammlung
+                this.BottleCollect.splice(index, 1);
+    
+                setTimeout(() => {
+                    //  addBottle() fügt die Flasche wieder hinzu
+                    this.BottleCollect.push(collectible);
+                }, 10000);
             }
         });
     }
+    
     
     draw(){
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height); 

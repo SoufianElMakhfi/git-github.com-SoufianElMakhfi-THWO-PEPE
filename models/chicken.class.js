@@ -44,8 +44,8 @@ class Chicken extends MoveableObject{
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_DEAD_ENEMY);
         
-        this.x = 840 + Math.random() * 800;
-        this.speed = 0.10 + Math.random() * 0.5;
+        this.x = 940 + Math.random() * 1800;
+        this.speed = 0.10 + Math.random() * 0.3;
         this.animate();
 
     }
@@ -55,7 +55,7 @@ class Chicken extends MoveableObject{
                 this.moveLeft();
                 this.otherDirection = true;
             }
-        }, 100 / 60);
+        }, 1000 / 144);
 
         this.animationInterval = setInterval(() => {
             if (this.energy == 0 && !this.isDead) {
@@ -72,7 +72,6 @@ class Chicken extends MoveableObject{
     }
 
     calculateAnimationDuration(images) {
-        // Annahme: Die Dauer jeder Bildframe ist 14000/144 Millisekunden (wie im Originalcode)
         // Anpassen je nach tatsächlicher Dauer und Anzahl der Frames in der Todesanimation
         return images.length * (14000 / 144);
     }}
