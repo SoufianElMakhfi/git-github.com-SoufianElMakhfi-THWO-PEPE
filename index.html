@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Start</title>
+</head>
+
+<style>
+    img{
+        width: 100%;
+        height: 100vh;
+    }
+    
+</style>
+<body>
+  
+    <img style="margin: 0; padding:0; width: 100%;" src="img/img_pollo_locco/img/5_background/start.jpg" alt="">
+    <!-- Link, der wie eine Schaltfläche aussieht -->
+    <a href="game.html" class="start_button">Start</a>
+
+
+    <div class="popup-background">
+        <img class="popup" src="img/img_pollo_locco/img/1_editables/setting_img.png" alt="">
+        <button id="closePopup">close</button>
+
+    </div>
+    <div>
+        <button id="redButton" class="setting_btn">Settings</button>
+    </div>
+
+    <script> 
+      document.getElementById('redButton').addEventListener('click', function() {
+        document.querySelector('.popup-background').style.display = 'flex';
+    });
+
+    // Schließen des Popups
+    document.getElementById('closePopup').addEventListener('click', function() {
+        document.querySelector('.popup-background').style.display = 'none';
+    });
+    </script>
+</body>
+</html>

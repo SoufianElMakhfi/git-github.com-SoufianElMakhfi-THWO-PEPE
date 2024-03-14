@@ -1,0 +1,195 @@
+body{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-image: url(img/img_pollo_locco/img/5_background/pattern.jpg);  
+    background-size: 20%;
+    background-repeat: repeat;
+    font-family: 'alloyInk', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+.start_button {
+    position: absolute;
+    bottom: 5%; /* Zentriert den Button vertikal */
+    left: 50%; /* Zentriert den Button horizontal */
+    transform: translate(-50%, -50%); /* Feinabstimmung zur genauen Zentrierung */
+    background-color: #FF9600;
+    color: white;
+    padding: 32px 32px;
+    font-size: 53px;
+    border-radius: 16px;
+}
+.start_button:hover{
+    background-color: #103010;   
+}
+a{
+    text-decoration: none;
+}
+
+.main_container{
+    color: white;
+    margin-top: 20px;
+
+}
+canvas{
+    background-color: black;
+    display: block;
+}
+.popup-background {
+    display: none; /* Versteckt bis aktiviert */
+    position: fixed; /* Bleibt auch beim Scrollen an Ort und Stelle */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Semi-transparenter Hintergrund */
+    z-index: 100; /* Stellt sicher, dass es über anderen Inhalten liegt */
+    justify-content: center;
+    align-items: center;
+}
+.popup {
+    width: 50%;
+    height: auto;
+    border-radius: 16px; 
+    position: fixed;
+    top: 50px;
+    
+}
+.setting_btn{
+    background-color: #FF9600;
+    position: absolute;
+    bottom: 10px; /* Zentriert den Button vertikal */
+    left: 50%; /* Zentriert den Button horizontal */
+    transform: translate(-50%, -50%); /* Feinabstimmung zur genauen Zentrierung */
+    background-color: #40362A;
+    color: white;
+    padding: 8px 8px;
+    font-size: 16px;
+    border-radius: 16px;
+    cursor: pointer;
+}
+.setting_btn:hover{
+    background-color: #4d4337;
+}
+#closePopup{
+    position: fixed; 
+    bottom: 30px; 
+    right: auto;
+    left: auto;
+    background-color: orange;
+    border: none;
+    cursor: pointer;
+    padding: 16px 16px;
+    border-radius: 8px;
+    font-family: 'alloyInk';
+}
+#closePopup:hover{
+    background-color:#FF9600;
+}
+.game_over_screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%; 
+    height: 100%; 
+    background-color: rgba(0, 0, 0, 0.9); 
+    color: white;
+    z-index: 10; 
+}
+.contents_gameover{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+.start_new_match_btn{
+    background-color:#FF9600;
+    padding: 16px;
+    border-radius: 16px;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+.start_new_match_btn:hover{
+    background-color: #04c804;
+}
+#gameOverScreen{
+    display: none;
+}
+.main_panel{
+    display: flex;
+    max-width: 1440px;
+    justify-content: space-between;
+    width: 90%;
+    position: absolute;
+    bottom: 0;
+    opacity: 70%;
+}
+.orientation_warning {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 720px;
+    background-color: black;
+    color: white;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 24px;
+    z-index: 1000;
+    margin-bottom: 32px;
+}
+.mobile_btn{
+    width: 32px;
+    margin-bottom: 20px;
+    display: none;
+}
+.mobile_panel{
+    display: flex;
+}
+.mute_btn{
+    position: fixed;
+    top: 80px; 
+    right: 60px;
+    width: 30px;
+    cursor: pointer;
+}
+
+@font-face {
+    font-family: 'alloyInk';
+    src: url('fonts/alloyInk-lgdWw.otf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+}  
+
+@media only screen and (max-width: 1440px) {
+    canvas{
+        width: 100%;
+    }
+  
+}
+@media only screen and (max-height: 640px){
+    canvas{
+      
+        width: 100%;
+    }
+    h1{
+        display: none;
+    }    
+}
+@media (max-width: 768px) {
+    .mobile_btn {
+        display: flex;
+    }
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>PEPE</title>
+    <script src="models/drawable-objects.class.js"></script>
+    <script src="models/moveable-object.class.js"></script>
+    <script src="models/character.class.js"></script>
+    <script src="models/chicken.class.js"></script>
+    <script src="models/cloud.class.js"></script>
+    <script src="models/status-bar.class.js"></script>
+    <script src="models/status-bar-endboss.class.js"></script>
+    <script src="models/status-bar-bottles.class.js"></script>    
+    <script src="models/world.class.js"></script>
+    <script src="models/background-object.class.js"></script>
+    <script src="models/keyboard.class.js"></script>
+    <script src="models/level.class.js"></script>
+    <script src="models/throwable-object.class.js"></script>
+    <script src="models/bottle-collectible.class.js"></script>
+    <script src="models/coin-collectible.class.js"></script>
+    <script src="models/endboss.class.js"></script>
+    <script src="models/levels/level1.js"></script>
+    <script src="js/game.js"></script>
+    <link rel="preload" href="fonts/alloyInk-lgdWw.otf" as="font" type="font/otf" crossorigin>
+
+</head>
+<script>
+function playSound() {
+    document.getElementById('backgroundSound').play();
+}
+
+function adjustVolume(value) {
+    let audio = document.getElementById('backgroundSound');
+    audio.volume = value;
+}
+
+function initPage() {
+}
+
+function checkOrientation() {
+        const orientationWarning = document.querySelector('.orientation-warning');
+        // Überprüfe, ob die Ausrichtung Hochformat ist
+        if (window.innerHeight > window.innerWidth) {
+            orientationWarning.style.display = 'flex';
+        } else {
+            orientationWarning.style.display = 'none';
+        }
+    }
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('orientationchange', checkOrientation);
+
+    
+    
+</script>
+
+<body onload="init(); playSound();">
+
+    <div class="orientation_warning"> <img src="img/img_pollo_locco/img/mobile_btn/rotatephone.png" alt="">Handy bitte umdrehen.</div>
+
+
+    <audio id="backgroundSound" src="audio/start_sound.mp3" type="audio/mp3"></audio>
+
+<div class="main_container">
+    <h1>THE HAUNTED WOODS OF PEPE</h1>
+    <canvas id="canvas" width="1440" height="640"></canvas>
+    
+
+
+    <div id="gameOverScreen" class="game_over_screen">
+       <div class="contents_gameover">
+        <h1>PEPE DEAD!</h1>
+        <img style="margin: 0;" src="img/img_pollo_locco/img/1_editables/pepe_dead.png" alt="">
+        <h2>GAME OVER</h2>
+        <br>
+        <button  class="start_new_match_btn" type="submit" onClick="refreshPage()">Start new Match</button> <!--settings on game.js-->
+       </div>
+    </div>
+    
+</div>
+<div id="muteBtn" class="mute_btn"><img src="img/img_pollo_locco/img/1_editables/mute.png" alt=""></div>
+
+
+<div class="main_panel">
+
+<div style="display: flex;">
+<img id="mobile_leftBtn"   class="mobile_btn" src="img/img_pollo_locco/img/mobile_btn/btn_left.png" alt="">
+<img id="mobile_rightBtn"  class="mobile_btn" src="img/img_pollo_locco/img/mobile_btn/btn_right.png" alt="">
+</div>
+
+<div style="display: flex;">
+    <img id="mobile_jumpBtn"  class="mobile_btn"  src="img/img_pollo_locco/img/mobile_btn/btn_jump.png" alt="">
+    <img id="mobile_throwBtn" class="mobile_btn"  src="img/img_pollo_locco/img/mobile_btn/btn_throw.png" alt="">
+</div>
+
+</div>
+
+</body>
+</html>
