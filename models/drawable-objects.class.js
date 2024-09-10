@@ -40,6 +40,7 @@ class DrawableObjekt {
                 ctx.stroke();
             }
             
+            
     }
     
         loadImages(arr){

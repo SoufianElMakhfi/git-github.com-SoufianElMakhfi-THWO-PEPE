@@ -192,7 +192,7 @@ class World {
                     this.statusBarEndboss.setpercentage(this.endboss.health);
     
                     // Ändere die Richtung und verlangsame die Flasche nach dem Treffer
-                    bottle.speedY = 3; // Verlangsame die Fallgeschwindigkeit
+                    bottle.speedY = 3; // Verlangsamt die Fallgeschwindigkeit
                     bottle.x -= 10; // Ändert die Richtung der Bewegung, sodass die Flasche zurückfliegt
                     bottle.y -= 20; // Leicht Erhöhung um den Abprall zu simulieren
                     

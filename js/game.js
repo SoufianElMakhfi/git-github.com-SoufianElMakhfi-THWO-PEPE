@@ -42,7 +42,6 @@ function init(){
 }
 
 window.addEventListener("keydown", (event) => {
-    console.log(event.keyCode);
     if(event.code == 'KeyD') {
         keyboard.RIGHT = true;
     }
@@ -59,7 +58,6 @@ window.addEventListener("keydown", (event) => {
         keyboard.RBMOUSE = true;
     }
 
-    console.log(event);
 });
 
 window.addEventListener("keyup", (event) => {
@@ -79,7 +77,6 @@ window.addEventListener("keyup", (event) => {
         keyboard.RBMOUSE = false;
     }
 
-    console.log(event);
 });
 function refreshPage() {
     document.getElementById('gameOverScreen').style.display = 'none'; 
