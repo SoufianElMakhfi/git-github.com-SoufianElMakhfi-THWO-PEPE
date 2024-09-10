@@ -43,12 +43,19 @@ class World {
         }, 200);
     }
 
-    checkThrowObjects(){
-        if(this.keyboard.RBMOUSE){
-            let bottle = new ThrowableObject (this.character.x + 100, this.character.y + 100);
+    checkThrowObjects() {
+        // Überprüfen, ob der Füllstand der Flaschenstatusleiste mindestens 20 % beträgt
+        if (this.keyboard.RBMOUSE && this.statusBarBottles.percentage >= 20) {
+            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
             this.throwableObjects.push(bottle);
+    
+            // Reduziere den Füllstand der Flaschenstatusleiste um 20 %
+            let newPercentage = Math.max(this.statusBarBottles.percentage - 20, 0);
+            this.statusBarBottles.setpercentage(newPercentage);
         }
     }
+    
+    
 
     checkCollisions(){
         this.level.enemies.forEach((enemy, index) => {
@@ -93,7 +100,7 @@ class World {
     collectBottles() {
         this.BottleCollect.forEach((collectible, index) => {
             if (this.character.isColliding(collectible)) {
-                // Erzeuge eine neue Audio-Instanz für jede Flasche
+                // Erzeuge eine neue Audio-Instanz für das Aufsammeln der Flasche
                 let bottleCollectSound = new Audio('audio/bottle_collect.mp3');
                 bottleCollectSound.volume = 0.2;
                 bottleCollectSound.play();
@@ -104,13 +111,18 @@ class World {
                 // Entferne die Flasche aus der Sammlung
                 this.BottleCollect.splice(index, 1);
     
+                // Fülle die Statusleiste auf
+                let newPercentage = Math.min(this.statusBarBottles.percentage + 20, 100);
+                this.statusBarBottles.setpercentage(newPercentage);
+    
                 setTimeout(() => {
-                    //  addBottle() fügt die Flasche wieder hinzu
+                    // Füge die Flasche nach 10 Sekunden wieder zur Sammlung hinzu
                     this.BottleCollect.push(collectible);
                 }, 10000);
             }
         });
     }
+    
     
     
     draw(){
@@ -172,16 +184,24 @@ class World {
         this.ctx.restore();
     }
     
-    checkCollisionBoss(){
+    checkCollisionBoss() {
         setInterval(() => {
-            this.throwableObjects.forEach((bottle) => {
-                if (this.endboss.isColliding(bottle)){
+            this.throwableObjects.forEach((bottle, index) => {
+                if (this.endboss.isColliding(bottle)) {
                     this.endboss.hittedBoss();
-                    this.statusBarEndboss.setpercentage(this.endboss.health)
-                    // Stellen Sie sicher, dass die Gesundheit des Endbosses nicht unter 0 fällt
-                    console.log('collision Health', this.endboss.health);
+                    this.statusBarEndboss.setpercentage(this.endboss.health);
+    
+                    // Ändere die Richtung und verlangsame die Flasche nach dem Treffer
+                    bottle.speedY = 3; // Verlangsame die Fallgeschwindigkeit
+                    bottle.x -= 10; // Ändert die Richtung der Bewegung, sodass die Flasche zurückfliegt
+                    bottle.y -= 20; // Leicht Erhöhung um den Abprall zu simulieren
+                    
+                    // Entfernt die Flasche nach einiger Zeit, damit sie nicht ewig bleibt
+                    setTimeout(() => {
+                        this.throwableObjects.splice(index, 1);
+                    }, 1000);
                 }
             });
         }, 1000);
     }
-}
+}    

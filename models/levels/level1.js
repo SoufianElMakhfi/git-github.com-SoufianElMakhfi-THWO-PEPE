@@ -6,7 +6,9 @@ const level1 = new Level(
     new Chicken(2700, 200)
 ],
 [
-    new Cloud()
+    new Cloud(300,200), 
+
+
 ],
 [
     new backgroundObject('img/img_pollo_locco/img/Assets_2D/backgrounds2d/PNG/game_background_2/game_background_mirrored.png',-1440,-80),
