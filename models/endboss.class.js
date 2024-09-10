@@ -56,11 +56,13 @@ health = 150;
         let animationInterval = setInterval(() => {
             if (this.isBossDead()) {
                 this.playAnimation(this.IMAGES_DEAD_ENDBOSS);
-                clearInterval(animationInterval); // Stoppt die Animation, wenn der Boss tot ist
+                clearInterval(animationInterval); 
+                document.getElementById("winscreen").style.display = "block"; 
             } else {
                 this.playAnimation(this.IMAGES_WALKING_ENDBOSS);
                 this.otherDirection = true; 
             }
-
+    
         }, 4000 / 60);
-    }}
+    }
+}

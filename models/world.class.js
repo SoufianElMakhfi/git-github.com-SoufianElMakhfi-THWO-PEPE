@@ -13,7 +13,8 @@ class World {
     throwableObjects = [];
     BottleCollect = [new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect()];
     CoinCollect = [new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(),new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect()];
-
+   
+    
     
     constructor(canvas, keyboard){
         this.canvas = canvas;
