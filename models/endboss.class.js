@@ -3,7 +3,7 @@ height = 600;
 width = 350;
 y = -40;
 health = 100;
-
+speed = 1;
 
     IMAGES_WALKING_ENDBOSS = [
         'img/img_pollo_locco/img/Assets_2D/goblin/Orc/PNG/PNG Sequences/Kicking/0_Orc_Kicking_000.png',
@@ -39,6 +39,7 @@ health = 100;
         this.x = 3440;
         this.isDead = false;
         this.animate();
+        this.hasRunForward = false;
     }
 
     isBossDead() {
@@ -51,7 +52,34 @@ health = 100;
             this.health = 0;
         }
     }
+    moveTowardsCharacter(characterX) {
+        if (this.x < characterX) {
+            this.x += this.speed; // Bewege den Endboss nach rechts
+        } else {
+            this.x -= this.speed; // Bewege den Endboss nach links
+        }
+    }
+   
+    runForward() {
+        const fastSpeed = 10;
+        const runDuration = 1000; // Zeitdauer in Millisekunden (2 Sekunden)
+        const intervalDuration = 1000 / 60; // 60 FPS
 
+        const startTime = Date.now(); // Startzeit speichern
+
+        const runInterval = setInterval(() => {
+            // Berechne die verstrichene Zeit
+            const elapsedTime = Date.now() - startTime;
+
+            if (elapsedTime < runDuration) {
+                this.x -= fastSpeed; // Bewege nach vorne
+            } else {
+                clearInterval(runInterval); // Stoppe das Intervall, wenn die Zeit abgelaufen ist
+            }
+        }, intervalDuration);
+    }
+
+    
     animate() {
         let animationInterval = setInterval(() => {
             if (this.isBossDead() && !this.isDead) {
@@ -64,5 +92,11 @@ health = 100;
                 this.otherDirection = true; // Beispiel: der Boss bewegt sich
             }
         }, 2500 / 60);  // Aktualisiert 60 Mal pro Sekunde
+        setInterval(() => {
+            if (!this.isDead) {
+                this.moveTowardsCharacter(this.character.x);
+            }
+        }, 1000 / 60); // 60 FPS für die Bewegung
     }
 }
+    

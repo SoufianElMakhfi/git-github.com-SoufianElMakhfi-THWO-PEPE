@@ -25,7 +25,7 @@ class World{
         this.run();
         this.coinCollectSound = new Audio('audio/coin_collect.mp3');
         this.bottleCollectSound = new Audio('audio/bottle_collect.mp3');
-
+        this.endboss.character = this.character; 
     }
 
     setWorld(){
@@ -39,8 +39,17 @@ class World{
             this.checkCollisionBoss();
             this.collectCoins(); 
             this.collectBottles();
+            this.checkBossProximity();
 
         }, 200);
+    }
+    checkBossProximity() {
+        const distanceToCharacter = Math.abs(this.character.x - this.endboss.x);
+
+        if (distanceToCharacter < 900 && !this.endboss.hasRunForward) {
+            this.endboss.runForward();
+            this.endboss.hasRunForward = true; // Verhindert, dass der Endboss mehrfach läuft
+        }
     }
 
     checkThrowObjects() {
@@ -57,30 +66,44 @@ class World{
     
     
 
-    checkCollisions(){
-        this.level.enemies.forEach((enemy, index) => {
-            if (this.character.isColliding(enemy)){
-                if (enemy.energy > 0) {
-                    if (this.character.isColliding(enemy) && this.character.isAbovetheGround() && this.character.speedY < 0) {
-                        enemy.energy = 0;
-                        // Startet einen Timer, um den Feind nach 3 Sekunden zu entfernen
-                        setTimeout(() => {
-                            this.level.enemies.splice(index, 1);
-                        }, 3000);
-                        this.character.speedY = +15;
-    
-                        let hitSound = new Audio('audio/goblin_hitted.mp3');
-                        hitSound.volume = 0.5; // Lautstärke einstellen
-                        hitSound.play();
-                    } else {
-                        // Verursacht Schaden nur, wenn der Feind noch lebt
-                        this.character.hit();
-                        this.statusBar.setpercentage(this.character.energy);
-                    }
+    checkCollisions() {
+    // Überprüfen der Kollision mit normalen Feinden
+    this.level.enemies.forEach((enemy, index) => {
+        if (this.character.isColliding(enemy)) {
+            if (enemy.energy > 0) {
+                if (this.character.isColliding(enemy) && this.character.isAbovetheGround() && this.character.speedY < 0) {
+                    enemy.energy = 0;
+                    // Startet einen Timer, um den Feind nach 3 Sekunden zu entfernen
+                    setTimeout(() => {
+                        this.level.enemies.splice(index, 1);
+                    }, 3000);
+                    this.character.speedY = +15;
+
+                    let hitSound = new Audio('audio/goblin_hitted.mp3');
+                    hitSound.volume = 0.5; // Lautstärke einstellen
+                    hitSound.play();
+                } else {
+                    // Verursacht Schaden nur, wenn der Feind noch lebt
+                    this.character.hit();
+                    this.statusBar.setpercentage(this.character.energy);
                 }
             }
-        });
+        }
+    });
+
+    // Überprüfen der Kollision mit dem Endboss
+    if (this.character.isColliding(this.endboss)) {
+        if (this.character.isAbovetheGround() && this.character.speedY < 0) {
+            // Der Endboss erhält keinen Schaden, wenn der Charakter von oben kommt
+            this.character.speedY = +15; // Charakter springt weg
+        } else {
+            // Verursacht Schaden nur, wenn der Endboss noch lebt
+            this.character.hit();
+            this.statusBar.setpercentage(this.character.energy);
+        }
     }
+}
+
     
     collectCoins() {
         this.CoinCollect.forEach((collectible, index) => {
