@@ -6,7 +6,7 @@ const level1 = new Level(
     new Chicken(2700, 200)
 ],
 [
-    new Cloud(300,200), 
+    new Cloud(300,200)
 
 
 ],

@@ -1,4 +1,6 @@
 class StatusBarCoins extends DrawableObjekt {
+
+    
     IMAGES_COINS = [
         'img/img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/0.png',
         'img/img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/20.png',
@@ -6,6 +8,7 @@ class StatusBarCoins extends DrawableObjekt {
         'img/img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/60.png',
         'img/img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/80.png',
         'img/img_pollo_locco/img/7_statusbars/1_statusbar/1_statusbar_coin/blue/100.png'
+
     ];
 
     percentage = 0;
@@ -14,13 +17,14 @@ class StatusBarCoins extends DrawableObjekt {
         super();
         this.loadImages(this.IMAGES_COINS);
         this.x = 20;
-        this.y = 40;
+        this.y = 120;
         this.width = 220;
         this.height = 50;
-        this.setPercentage(0);
+        this.setpercentage(0);
+
     }
 
-    setPercentage(percentage) {
+    setpercentage(percentage) {
         this.percentage = percentage;
         let path = this.IMAGES_COINS[this.resolveImageIndex()];
         this.img = this.imageCache[path];
@@ -41,4 +45,5 @@ class StatusBarCoins extends DrawableObjekt {
             return 0;
         }
     }
+    
 }

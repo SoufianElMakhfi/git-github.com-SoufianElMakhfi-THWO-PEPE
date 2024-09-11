@@ -2,7 +2,7 @@ class Endboss extends MoveableObject {
 height = 600;
 width = 350;
 y = -40;
-health = 150;
+health = 100;
 
 
     IMAGES_WALKING_ENDBOSS = [
@@ -32,37 +32,37 @@ health = 150;
     ];   
 
 
-    constructor(){
+    constructor() {
         super().loadImage(this.IMAGES_WALKING_ENDBOSS[0]);
         this.loadImages(this.IMAGES_WALKING_ENDBOSS);
         this.loadImages(this.IMAGES_DEAD_ENDBOSS);
         this.x = 3440;
+        this.isDead = false;
         this.animate();
     }
-    
 
     isBossDead() {
-        return this.health <= 0;
+        return this.health <= 20;
     }
-    
-    hittedBoss(){
+
+    hittedBoss() {
         this.health -= 2;
-        if(this.health < 0){
+        if (this.health < 0) {
             this.health = 0;
         }
     }
 
     animate() {
         let animationInterval = setInterval(() => {
-            if (this.isBossDead()) {
-                this.playAnimation(this.IMAGES_DEAD_ENDBOSS);
-                clearInterval(animationInterval); 
-                document.getElementById("winscreen").style.display = "block"; 
-            } else {
-                this.playAnimation(this.IMAGES_WALKING_ENDBOSS);
-                this.otherDirection = true; 
+            if (this.isBossDead() && !this.isDead) {
+                this.isDead = true;  // Endboss stirbt jetzt
+                this.playAnimation(this.IMAGES_DEAD_ENDBOSS);  // Startet die Sterbe-Animation
+                clearInterval(animationInterval);  // Stoppt die Animation
+                document.getElementById("winscreen").style.display = "block"; // Zeigt den Siegbildschirm
+            } else if (!this.isDead) {
+                this.playAnimation(this.IMAGES_WALKING_ENDBOSS);  // Spielt nur, wenn der Endboss lebt
+                this.otherDirection = true; // Beispiel: der Boss bewegt sich
             }
-    
-        }, 4000 / 60);
+        }, 2500 / 60);  // Aktualisiert 60 Mal pro Sekunde
     }
 }

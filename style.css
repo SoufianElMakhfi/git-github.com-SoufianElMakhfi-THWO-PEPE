@@ -186,7 +186,10 @@ canvas{
     }
     h1{
         display: none;
-    }    
+    }  
+    .mobile_btn {
+        display: flex;
+    }  
 }
 @media (max-width: 768px) {
     .mobile_btn {

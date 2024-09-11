@@ -1,4 +1,4 @@
-class World {
+class World{
     character = new Character();
     endboss = new Endboss();
     bottle = new ThrowableObject();
@@ -7,13 +7,13 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
+    statusBarCoins = new StatusBarCoins();
     statusBar = new StatusBar();
     statusBarEndboss = new StatusBarEndboss();
     statusBarBottles = new StatusBarBottle();
     throwableObjects = [];
     BottleCollect = [new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect()];
-    CoinCollect = [new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(),new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect()];
-   
+    CoinCollect = [new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect()];
     
     
     constructor(canvas, keyboard){
@@ -92,10 +92,17 @@ class World {
                 setTimeout(() => {
                     coinCollectSound.pause(); // Stoppe den Sound nach einer Sekunde
                 }, 1000);
-                this.CoinCollect.splice(index, 1); 
+    
+                // Entferne die Münze aus der Sammlung
+                this.CoinCollect.splice(index, 1);
+    
+                // Erhöhe die Statusleiste um 20, aber max auf 100 begrenzen
+                let newPercentage = Math.min(this.statusBarCoins.percentage + 20, 100);
+                this.statusBarCoins.setpercentage(newPercentage);
             }
         });
     }
+    
 
     collectBottles() {
         this.BottleCollect.forEach((collectible, index) => {
@@ -135,6 +142,7 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.statusBarEndboss);
         this.addToMap(this.statusBarBottles);
+        this.addToMap(this.statusBarCoins);
 
         this.ctx.translate(this.camera_x, 0);
         this.addToMap(this.character); 
@@ -199,7 +207,7 @@ class World {
                     // Entfernt die Flasche nach einiger Zeit, damit sie nicht ewig bleibt
                     setTimeout(() => {
                         this.throwableObjects.splice(index, 1);
-                    }, 1000);
+                    }, 10000);
                 }
             });
         }, 1000);
