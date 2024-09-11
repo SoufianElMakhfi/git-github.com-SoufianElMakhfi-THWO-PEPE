@@ -5,6 +5,10 @@ y = -40;
 health = 100;
 speed = 1;
 
+endboss_sound = new Audio('audio/endboss_roar.mp3');
+endboss_hitted = new Audio('audio/endboss_hitted.mp3');
+endboss_dead = new Audio('audio/endboss_dead.mp3');
+
     IMAGES_WALKING_ENDBOSS = [
         'img/img_pollo_locco/img/Assets_2D/goblin/Orc/PNG/PNG Sequences/Kicking/0_Orc_Kicking_000.png',
         'img/img_pollo_locco/img/Assets_2D/goblin/Orc/PNG/PNG Sequences/Kicking/0_Orc_Kicking_001.png',
@@ -40,17 +44,23 @@ speed = 1;
         this.isDead = false;
         this.animate();
         this.hasRunForward = false;
+        this.endboss_sound.volume = 0.3;
+        this.endboss_sound.loop = true;
     }
 
     isBossDead() {
         return this.health <= 20;
+        
     }
+   
 
     hittedBoss() {
         this.health -= 2;
         if (this.health < 0) {
             this.health = 0;
         }
+        this.endboss_hitted.play();
+
     }
     moveTowardsCharacter(characterX) {
         if (this.x < characterX) {
@@ -62,15 +72,15 @@ speed = 1;
    
     runForward() {
         const fastSpeed = 10;
-        const runDuration = 1000; // Zeitdauer in Millisekunden (2 Sekunden)
+        const runDuration = 1000; // Zeitdauer in Millisekunden (1 Sekunde)
         const intervalDuration = 1000 / 60; // 60 FPS
-
+    
         const startTime = Date.now(); // Startzeit speichern
-
+        this.endboss_sound.play(); // Sound abspielen, wenn der Endboss startet
+    
         const runInterval = setInterval(() => {
-            // Berechne die verstrichene Zeit
             const elapsedTime = Date.now() - startTime;
-
+    
             if (elapsedTime < runDuration) {
                 this.x -= fastSpeed; // Bewege nach vorne
             } else {
@@ -79,31 +89,38 @@ speed = 1;
         }, intervalDuration);
     }
 
-    
+    stopEndbossSound() {
+        if (!this.endboss_sound.paused) {
+            this.endboss_sound.pause(); // Stoppe den Sound
+            this.endboss_sound.currentTime = 0; // Setze den Sound zurück
+        }
+    }
+
     animate() {
         let animationInterval = setInterval(() => {
             if (this.isBossDead() && !this.isDead) {
                 this.isDead = true;  // Endboss stirbt jetzt
+                this.stopEndbossSound(); // Stoppe den Sound, wenn der Endboss stirbt
+                this.endboss_dead.play();
                 this.playAnimation(this.IMAGES_DEAD_ENDBOSS);  // Startet die Sterbe-Animation
                 clearInterval(animationInterval);  // Stoppt die Animation
-    
+
                 // Verzögert die Anzeige des "Win"-Screens um 1 Sekunde
                 setTimeout(() => {
                     document.getElementById("winscreen").style.display = "block";
-                }, 1500); 
+                }, 1500);
                 
             } else if (!this.isDead) {
                 this.playAnimation(this.IMAGES_WALKING_ENDBOSS);  // Spielt nur, wenn der Endboss lebt
                 this.otherDirection = true; // Beispiel: der Boss bewegt sich
             }
-        }, 1000 / 60);  // 60 FPS für die Animation
-    
+        }, 1000 / 60); 
+
         // Bewege den Endboss nur, wenn er nicht tot ist
         setInterval(() => {
             if (!this.isDead) {
                 this.moveTowardsCharacter(this.character.x);
             }
-        }, 1000 / 60); // 60 FPS für die Bewegung
+        }, 1000 / 60); 
     }
 }
-    

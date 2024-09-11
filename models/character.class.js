@@ -133,7 +133,6 @@ idle_sound = new Audio ('audio/snoring.mp3');
     
     throwBottle() {
         if (this.collectedBottles > 0) {
-           
             this.collectedBottles--; 
         }
     }
