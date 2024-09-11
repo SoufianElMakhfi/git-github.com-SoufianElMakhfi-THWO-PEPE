@@ -86,12 +86,19 @@ speed = 1;
                 this.isDead = true;  // Endboss stirbt jetzt
                 this.playAnimation(this.IMAGES_DEAD_ENDBOSS);  // Startet die Sterbe-Animation
                 clearInterval(animationInterval);  // Stoppt die Animation
-                document.getElementById("winscreen").style.display = "block"; // Zeigt den Siegbildschirm
+    
+                // Verzögert die Anzeige des "Win"-Screens um 1 Sekunde
+                setTimeout(() => {
+                    document.getElementById("winscreen").style.display = "block";
+                }, 1500); 
+                
             } else if (!this.isDead) {
                 this.playAnimation(this.IMAGES_WALKING_ENDBOSS);  // Spielt nur, wenn der Endboss lebt
                 this.otherDirection = true; // Beispiel: der Boss bewegt sich
             }
-        }, 2500 / 60);  // Aktualisiert 60 Mal pro Sekunde
+        }, 1000 / 60);  // 60 FPS für die Animation
+    
+        // Bewege den Endboss nur, wenn er nicht tot ist
         setInterval(() => {
             if (!this.isDead) {
                 this.moveTowardsCharacter(this.character.x);

@@ -3,7 +3,10 @@ y = 100;
 speed = 10;
 width = 100;
 height = 360;
-
+lastActionTime = new Date().getTime(); // Zeitpunkt der letzten Aktion
+idleImageIndex = 120; // Bildindex für die Idle-Animation
+idleCounter = 0; // Zählvariable für Idle-Frames
+idlePlaying = false;
 
 IMAGES_WALKING = [
 'img/img_pollo_locco/img/2_character_pepe/2_walk/W-21.png',
@@ -58,6 +61,18 @@ IMAGES_SLEEPING = [
     'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-19.png',
     'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-20.png'
 ];
+IMAGES_IDLE = [
+    'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-11.png',
+    'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-12.png',
+    'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-13.png',
+    'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-14.png',
+    'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-15.png',
+    'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-16.png',
+    'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-17.png',
+    'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-18.png',
+    'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-19.png',
+    'img/img_pollo_locco/img/2_character_pepe/1_idle/long_idle/I-20.png',
+];
 
 world;
 walking_sound = new Audio('audio/walk_sound.mp3');
@@ -65,6 +80,7 @@ jumping_sound = new Audio('audio/jump.mp3');
 coin_sound = new Audio ('audio/coin_collect.mp4');
 bottle_sound = new Audio ('audio/bottle_collect.ogg')
 collectedBottles = 0;
+idle_sound = new Audio ('audio/snoring.mp3');
 
 
 
@@ -76,9 +92,41 @@ collectedBottles = 0;
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_SLEEPING);
         this.jumping_sound.volume = 0.5; // 50% Lautstärke
+        this.idle_sound.volume = 0.3; 
+        this.idle_sound.loop = true;  // Idle-Sound in eine Schleife setzen
+
         this.applyGravity();
         this.animate();
     }
+    resetActionTimer() {
+        this.lastActionTime = new Date().getTime(); // Timer zurücksetzen
+    }
+
+    checkInactivity() {
+        let currentTime = new Date().getTime();
+        let timeSinceLastAction = currentTime - this.lastActionTime;
+
+        if (timeSinceLastAction >= 2000) { 
+            this.playIdleAnimation(); // Langsame Idle-Animation aufrufen
+            this.playIdleSound();
+        }
+    }
+    playIdleSound() {
+        if (!this.idlePlaying) { // Prüfen, ob der Idle-Sound schon läuft
+            this.idle_sound.play();
+            this.idlePlaying = true; // Flag setzen, dass der Sound läuft
+        }
+    
+    }
+
+    stopIdleSound() {
+        if (this.idlePlaying) { // Nur stoppen, wenn der Sound läuft
+            this.idle_sound.pause();
+            this.idle_sound.currentTime = 0; // Zurückspulen des Sounds
+            this.idlePlaying = false; // Flag zurücksetzen
+        }
+    }
+
     collectBottle() {
         this.collectedBottles++; // Erhöht die Anzahl der gesammelten Flaschen
     }
@@ -89,51 +137,67 @@ collectedBottles = 0;
             this.collectedBottles--; 
         }
     }
-    
+    playIdleAnimation() {
+        if (this.idleCounter % 15 == 0) { // Verlangsamt den Bildwechsel 
+            this.playAnimation(this.IMAGES_IDLE);
+            this.idleImageIndex++;
+            if (this.idleImageIndex >= this.IMAGES_IDLE.length) {
+                this.idleImageIndex = 0; // Zurücksetzen, wenn das Ende der Animation erreicht ist
+            }
+        }
+        this.idleCounter++; // Erhöht den Frame-Zähler
+    }
+
     animate() {
-    setInterval(() => {
-    // this.walking_sound.pause(); Falls der sound zu lang ist
-    if(this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x){
-        this.moveRight();
-        this.walking_sound.play();
-    }
-    if(this.world.keyboard.LEFT && this.x > 0){
-     this.moveLeft();
-        this.walking_sound.play();
-    }
-    if(this.world.keyboard.UP && !this.isAbovetheGround()) {
-        this.jump();
-    }   
-      this.world.camera_x = -this.x +110;
-    }, 1000/ 60);
-
-
         setInterval(() => {
-            if(this.isDead()){
+            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+                this.moveRight();
+                this.walking_sound.play();
+                this.resetActionTimer();
+                this.idleCounter = 0; // Zähler zurücksetzen, wenn der Charakter aktiv ist
+                this.stopIdleSound(); // Idle-Sound stoppen
+            }
+            if (this.world.keyboard.LEFT && this.x > 0) {
+                this.moveLeft();
+                this.walking_sound.play();
+                this.resetActionTimer();
+                this.idleCounter = 0; // Zähler zurücksetzen, wenn der Charakter aktiv ist
+                this.stopIdleSound(); // Idle-Sound stoppen
+            }
+            if (this.world.keyboard.UP && !this.isAbovetheGround()) {
+                this.jump();
+                this.resetActionTimer();
+                this.idleCounter = 0; // Zähler zurücksetzen, wenn der Charakter aktiv ist
+                this.stopIdleSound(); // Idle-Sound stoppen
+            }
+            this.world.camera_x = -this.x + 110;
+    
+            this.checkInactivity(); // Überprüfe, ob der Charakter inaktiv ist
+        }, 1000 / 60);
+    
+        setInterval(() => {
+            if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
-                document.getElementById('gameOverScreen').style.display = 'block'; // Zeigt den Game-Over-Bildschirm an
-                
-            } else if(this.isHurt()){
+                document.getElementById('gameOverScreen').style.display = 'block';
+            } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
                 this.jumping_sound.play();
+            } else if (this.isAbovetheGround()) {
+                this.playAnimation(this.IMAGES_JUMPING);
+            } else {
+                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                    this.playAnimation(this.IMAGES_WALKING);
+                }
+            }
+        }, 80);
+    }
 
-            } else if(this.isAbovetheGround()) {
-            this.playAnimation(this.IMAGES_JUMPING);
-        }  else {  
-            if(this.world.keyboard.RIGHT || this.world.keyboard.LEFT){
-            this.playAnimation(this.IMAGES_WALKING);
-         }
-       }
-    },80);
-    
-}
-
-    jump(){
+    jump() {
         this.jumping_sound.play();
         this.speedY = 25;
-
-
     }
+
+
     checkCollisions() {
         super.checkCollisions(); // Behält bestehende Kollisionsprüfungen bei
         // Erweitert die Kollisionsprüfung für das Einsammeln von Flaschen

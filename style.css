@@ -18,9 +18,9 @@ h1{
 }
 .start_button {
     position: absolute;
-    bottom: 5%; /* Zentriert den Button vertikal */
-    left: 50%; /* Zentriert den Button horizontal */
-    transform: translate(-50%, -50%); /* Feinabstimmung zur genauen Zentrierung */
+    bottom: 5%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
     background-color: #FF9600;
     color: white;
     padding: 32px 32px;
@@ -39,19 +39,23 @@ a{
     margin-top: 20px;
 
 }
+h3{
+   text-align: center;
+   color: #FF9600;
+}
 canvas{
     background-color: black;
     display: block;
 }
 .popup-background {
-    display: none; /* Versteckt bis aktiviert */
-    position: fixed; /* Bleibt auch beim Scrollen an Ort und Stelle */
+    display: none; 
+    position: fixed; 
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* Semi-transparenter Hintergrund */
-    z-index: 100; /* Stellt sicher, dass es über anderen Inhalten liegt */
+    background-color: rgba(0, 0, 0, 0.9); 
+    z-index: 100;
     justify-content: center;
     align-items: center;
 }
@@ -66,9 +70,9 @@ canvas{
 .setting_btn{
     background-color: #FF9600;
     position: absolute;
-    bottom: 10px; /* Zentriert den Button vertikal */
-    left: 50%; /* Zentriert den Button horizontal */
-    transform: translate(-50%, -50%); /* Feinabstimmung zur genauen Zentrierung */
+    bottom: 10px; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
     background-color: #40362A;
     color: white;
     padding: 8px 8px;
@@ -170,7 +174,7 @@ canvas{
 
 @font-face {
     font-family: 'alloyInk';
-    src: url('fonts/alloyInk-lgdWw.otf') format('truetype'); /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3—5 */
+    src: url('fonts/alloyInk-lgdWw.otf') format('truetype'); 
 }  
 
 @media only screen and (max-width: 1440px) {

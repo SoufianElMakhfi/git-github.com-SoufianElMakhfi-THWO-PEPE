@@ -76,7 +76,7 @@ class World{
                     // Startet einen Timer, um den Feind nach 3 Sekunden zu entfernen
                     setTimeout(() => {
                         this.level.enemies.splice(index, 1);
-                    }, 3000);
+                    }, 1000);
                     this.character.speedY = +15;
 
                     let hitSound = new Audio('audio/goblin_hitted.mp3');
