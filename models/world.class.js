@@ -16,7 +16,7 @@ class World{
     CoinCollect = [new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect()];
     gameOver = false;
     
-    constructor(canvas, keyboard) {
+    constructor(canvas, keyboard){
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.keyboard = keyboard;
@@ -25,7 +25,7 @@ class World{
         this.run();
         this.coinCollectSound = new Audio('audio/coin_collect.mp3');
         this.bottleCollectSound = new Audio('audio/bottle_collect.mp3');
-        this.endboss.character = this.character;
+        this.endboss.character = this.character; 
     }
 
     setWorld(){
