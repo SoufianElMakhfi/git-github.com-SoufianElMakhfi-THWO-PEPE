@@ -4,10 +4,12 @@ width = 350;
 y = -40;
 health = 100;
 speed = 1;
+isWinSoundPlayed = false;
 
 endboss_sound = new Audio('audio/endboss_roar.mp3');
 endboss_hitted = new Audio('audio/endboss_hitted.mp3');
 endboss_dead = new Audio('audio/endboss_dead.mp3');
+win_sound = new Audio('audio/win_sound.mp3')
 
     IMAGES_WALKING_ENDBOSS = [
         'img/img_pollo_locco/img/Assets_2D/goblin/Orc/PNG/PNG Sequences/Kicking/0_Orc_Kicking_000.png',
@@ -45,6 +47,7 @@ endboss_dead = new Audio('audio/endboss_dead.mp3');
         this.animate();
         this.hasRunForward = false;
         this.endboss_sound.volume = 0.3;
+        this.win_sound.volume = 0.15;
         this.endboss_sound.loop = true;
     }
 
@@ -100,22 +103,27 @@ endboss_dead = new Audio('audio/endboss_dead.mp3');
         let animationInterval = setInterval(() => {
             if (this.isBossDead() && !this.isDead) {
                 this.isDead = true;  // Endboss stirbt jetzt
-                this.stopEndbossSound(); // Stoppe den Sound, wenn der Endboss stirbt
+                this.stopEndbossSound(); // Stoppe den Endboss-Sound
                 this.endboss_dead.play();
                 this.playAnimation(this.IMAGES_DEAD_ENDBOSS);  // Startet die Sterbe-Animation
                 clearInterval(animationInterval);  // Stoppt die Animation
-
+    
                 // Verzögert die Anzeige des "Win"-Screens um 1 Sekunde
                 setTimeout(() => {
                     document.getElementById("winscreen").style.display = "block";
                 }, 1500);
-                
+    
+                // Spiele den Win-Sound, wenn der Endboss stirbt
+                if (!this.isWinSoundPlayed) {
+                    this.win_sound.play();
+                    this.isWinSoundPlayed = true;  // Sicherstellen, dass der Sound nur einmal abgespielt wird
+                }
             } else if (!this.isDead) {
                 this.playAnimation(this.IMAGES_WALKING_ENDBOSS);  // Spielt nur, wenn der Endboss lebt
                 this.otherDirection = true; // Beispiel: der Boss bewegt sich
             }
         }, 1000 / 60); 
-
+    
         // Bewege den Endboss nur, wenn er nicht tot ist
         setInterval(() => {
             if (!this.isDead) {
