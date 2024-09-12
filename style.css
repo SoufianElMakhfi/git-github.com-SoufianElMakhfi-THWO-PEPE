@@ -185,7 +185,6 @@ canvas{
 }
 @media only screen and (max-height: 640px){
     canvas{
-      
         width: 100%;
     }
     h1{
@@ -194,9 +193,13 @@ canvas{
     .mobile_btn {
         display: flex;
     }  
+    h3{
+        display: none;
+    }
 }
 @media (max-width: 768px) {
     .mobile_btn {
         display: flex;
     }
+    
 }

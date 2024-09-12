@@ -14,9 +14,9 @@ class World{
     throwableObjects = [];
     BottleCollect = [new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect(), new BottleCollect()];
     CoinCollect = [new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect(), new CoinCollect()];
+    gameOver = false;
     
-    
-    constructor(canvas, keyboard){
+    constructor(canvas, keyboard) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.keyboard = keyboard;
@@ -25,24 +25,47 @@ class World{
         this.run();
         this.coinCollectSound = new Audio('audio/coin_collect.mp3');
         this.bottleCollectSound = new Audio('audio/bottle_collect.mp3');
-        this.endboss.character = this.character; 
+        this.endboss.character = this.character;
     }
 
     setWorld(){
         this.character.world = this;
     }
 
-    run(){
+    run() {
         setInterval(() => {
-            this.checkCollisions();
-            this.checkThrowObjects();
-            this.checkCollisionBoss();
-            this.collectCoins(); 
-            this.collectBottles();
-            this.checkBossProximity();
-
+            if (!this.gameOver) {  // Spiel läuft nur, wenn gameOver false ist
+                this.checkCollisions();
+                this.checkThrowObjects();
+                this.checkCollisionBoss();
+                this.collectCoins();
+                this.collectBottles();
+                this.checkBossProximity();
+                this.checkGameOver();  // Neue Methode zum Überprüfen, ob das Spiel vorbei ist
+            }
         }, 200);
     }
+
+    checkGameOver() {
+        if (this.character.energy <= 0 || this.endboss.health <= 0) {
+            this.gameOver = true;  // Das Spiel wird angehalten
+            this.displayGameOverScreen();  // Zeigt den Game-Over-Bildschirm an
+        }
+    }
+
+    displayGameOverScreen() {
+        let gameOverText = this.character.energy <= 0 ? "Game Over!" : "You Win!";
+        // Einfache Methode, um den Game-Over-Bildschirm zu zeigen
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.font = "80px AlloyInk";
+        this.ctx.fillStyle = "white";
+        this.ctx.textAlign = "center";
+        this.ctx.fillText(gameOverText, this.canvas.width / 2, this.canvas.height / 2);
+    }
+
+
     checkBossProximity() {
         const distanceToCharacter = Math.abs(this.character.x - this.endboss.x);
 

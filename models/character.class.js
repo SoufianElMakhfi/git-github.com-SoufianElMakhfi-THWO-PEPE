@@ -106,7 +106,7 @@ idle_sound = new Audio ('audio/snoring.mp3');
         let currentTime = new Date().getTime();
         let timeSinceLastAction = currentTime - this.lastActionTime;
 
-        if (timeSinceLastAction >= 2000) { 
+        if (timeSinceLastAction >= 2500) { 
             this.playIdleAnimation(); // Langsame Idle-Animation aufrufen
             this.playIdleSound();
         }
@@ -149,28 +149,33 @@ idle_sound = new Audio ('audio/snoring.mp3');
 
     animate() {
         setInterval(() => {
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.moveRight();
-                this.walking_sound.play();
-                this.resetActionTimer();
-                this.idleCounter = 0; // Zähler zurücksetzen, wenn der Charakter aktiv ist
-                this.stopIdleSound(); // Idle-Sound stoppen
+            if (!this.isDead() && !this.world.gameOver) { // Überprüfen, ob der Charakter nicht tot ist und das Spiel läuft
+                if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+                    this.moveRight();
+                    this.walking_sound.play();
+                    this.resetActionTimer();
+                    this.idleCounter = 0; // Zähler zurücksetzen, wenn der Charakter aktiv ist
+                    this.idle_sound.pause(); // Idle-Sound stoppen
+                }
+                if (this.world.keyboard.LEFT && this.x > 0) {
+                    this.moveLeft();
+                    this.walking_sound.play();
+                    this.resetActionTimer();
+                    this.idleCounter = 0; // Zähler zurücksetzen, wenn der Charakter aktiv ist
+                    this.stopIdleSound(); // Idle-Sound stoppen
+                }
+                if (this.world.keyboard.UP && !this.isAbovetheGround()) {
+                    this.jump();
+                    this.resetActionTimer();
+                    this.idleCounter = 0; // Zähler zurücksetzen, wenn der Charakter aktiv ist
+                    this.idle_sound.pause(); // Idle-Sound stoppen
+                }
+            } else {
+                this.walking_sound.pause(); // Bewegung stoppen, wenn der Charakter tot ist
+                this.idle_sound.pause(); // Idle-Sound stoppen, wenn das Spiel vorbei ist
             }
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.moveLeft();
-                this.walking_sound.play();
-                this.resetActionTimer();
-                this.idleCounter = 0; // Zähler zurücksetzen, wenn der Charakter aktiv ist
-                this.stopIdleSound(); // Idle-Sound stoppen
-            }
-            if (this.world.keyboard.UP && !this.isAbovetheGround()) {
-                this.jump();
-                this.resetActionTimer();
-                this.idleCounter = 0; // Zähler zurücksetzen, wenn der Charakter aktiv ist
-                this.stopIdleSound(); // Idle-Sound stoppen
-            }
-            this.world.camera_x = -this.x + 110;
     
+            this.world.camera_x = -this.x + 110;
             this.checkInactivity(); // Überprüfe, ob der Charakter inaktiv ist
         }, 1000 / 60);
     
@@ -178,6 +183,7 @@ idle_sound = new Audio ('audio/snoring.mp3');
             if (this.isDead()) {
                 this.playAnimation(this.IMAGES_DEAD);
                 document.getElementById('gameOverScreen').style.display = 'block';
+                this.stopIdleSound(); // Stoppe Idle-Sound beim Tod
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
                 this.jumping_sound.play();
